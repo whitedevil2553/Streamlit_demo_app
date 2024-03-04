@@ -1,10 +1,8 @@
-
-
-
+import os
+from pathlib import Path
 import streamlit as st
 from streamlit_option_menu import option_menu
 from PIL import Image
-from google.colab import drive
 
 
 st.set_page_config(page_title="Health Assistant",
@@ -12,12 +10,6 @@ st.set_page_config(page_title="Health Assistant",
                    page_icon="🧑‍⚕️")
 
 
-
-# filename = 'diabetes_model.sav'
-# pickle.dump(classifier, open(filename, 'wb'))
-
-
-diabetes_model = pickle.load(open(f'{working_dir}CNN_BrainMRI_tumor_classification.pt', 'rb'))
 
 with st.sidebar:
     selected = option_menu('Multiple Disease Prediction System',
@@ -31,9 +23,6 @@ with st.sidebar:
                            menu_icon='hospital-fill',
                            icons=['activity', 'heart', 'person','heart'],
                            default_index=0)
-
-
-
 
 
 
@@ -71,54 +60,49 @@ if selected == 'Diabetes Prediction':
     with col2:
         Age = st.text_input('Age of the Person')
 
-    # code for Prediction
-    diab_diagnosis = ''
-
-    # creating a button for Prediction
-
-    if st.button('Diabetes Test Result'):
-
-        user_input = [Pregnancies, Glucose, BloodPressure, SkinThickness, Insulin,
-                      BMI, DiabetesPedigreeFunction, Age]
-
-        user_input = [float(x) for x in user_input]
-
-        diab_prediction = diabetes_model.predict([user_input])
-
-        if diab_prediction[0] == 1:
-            diab_diagnosis = 'The person is diabetic'
-        else:
-            diab_diagnosis = 'The person is not diabetic'
-
-    st.success(diab_diagnosis)
-
     
 if selected == 'Heart Disease Prediction':
-    st.title("Image Recogonization")
+    
+
+    # # drive.mount('/content/gdrive')  # Replace '/content/gdrive' with your desired mount point
+    # st.title("Image Classification with Streamlit and Google Colab")
+    # st.write("Upload an image and it will be processed in Google Colab.")
+    # uploaded_file = st.file_uploader("Choose an image:", type=["jpg", "jpeg", "png"])
+    
+    # if uploaded_file is not None:
+    #     image = Image.open(uploaded_file)  # Open the uploaded image using PIL(pillow library)
+    #     st.image(image, caption="Uploaded Image", use_column_width=True)
+    #     # Save the uploaded image to Google Drive
+    #     with open('/content/gdrive/My Drive/Drive-image/' + uploaded_file.name, 'wb') as f:
+    #         f.write(uploaded_file.read())
+    #     st.success("Image uploaded successfully!")
 
 
-    # def display_local_image():
-    #     """Displays an image uploaded from the local disk."""
-    #     uploaded_file = st.file_uploader("Choose an MRI Image From Your Local Disk", type=['jpg', 'png','jpeg'])
-    #     if uploaded_file is not None:
-    #         image = Image.open(uploaded_file)  # Open the uploaded image using PIL(pillow library)
-    #         st.image(image, caption="Uploaded Image", use_column_width=True)
-
-    # display_local_image()
 
 
+    def upload_to_drive(uploaded_file):
+        # Define the directory path in Google Drive
+        drive_path = '/content/gdrive/My Drive/Drive-image/'
+    
+        # Create directory if it doesn't exist
+        os.makedirs(drive_path, exist_ok=True)
+    
+        # Get the file name
+        filename = Path(uploaded_file.name).name
+    
+        # Construct the full file path
+        file_path = os.path.join(drive_path, filename)
+    
+        # Write the uploaded file to Google Drive
+        with open(file_path, 'wb') as f:
+            f.write(uploaded_file.getvalue())
+    
+        # Inform the user about successful upload
+    st.success(f"File '{filename}' uploaded to Google Drive successfully.")
 
-    drive.mount('/content/gdrive')  # Replace '/content/gdrive' with your desired mount point
-    st.title("Image Classification with Streamlit and Google Colab")
-    st.write("Upload an image and it will be processed in Google Colab.")
-    uploaded_file = st.file_uploader("Choose an image:", type=["jpg", "jpeg", "png"])
+    # Streamlit app code
+    if __name__ == '__main__':
+        uploaded_file = st.file_uploader("Upload an image", type=['png', 'jpg', 'jpeg'])
     
     if uploaded_file is not None:
-        # Save the uploaded image to Google Drive
-        with open('/content/gdrive/My Drive/images/' + uploaded_file.name, 'wb') as f:
-            f.write(uploaded_file.read())
-        st.success("Image uploaded successfully!")
-
-
-
-
+        upload_to_drive(uploaded_file)
