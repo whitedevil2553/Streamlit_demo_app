@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -80,18 +79,21 @@ if selected == 'Heart Disease Prediction':
 
 
 
+
+
+    # Function to upload image to Google Drive
     def upload_to_drive(uploaded_file):
         # Define the directory path in Google Drive
-        drive_path = '/content/gdrive/My Drive/Drive-image/'
+        drive_path = Path('/content/gdrive/My Drive/Drive-image/')
     
         # Create directory if it doesn't exist
-        os.makedirs(drive_path, exist_ok=True)
+        drive_path.mkdir(parents=True, exist_ok=True)
     
         # Get the file name
-        filename = Path(uploaded_file.name).name
+        filename = uploaded_file.name
     
         # Construct the full file path
-        file_path = os.path.join(drive_path, filename)
+        file_path = drive_path / filename
     
         # Write the uploaded file to Google Drive
         with open(file_path, 'wb') as f:
@@ -104,6 +106,7 @@ if selected == 'Heart Disease Prediction':
     if __name__ == '__main__':
         uploaded_file = st.file_uploader("Upload an image", type=['png', 'jpg', 'jpeg'])
     
-    if uploaded_file is not None:
-        upload_to_drive(uploaded_file)
+        if uploaded_file is not None:
+            upload_to_drive(uploaded_file)
+
 
