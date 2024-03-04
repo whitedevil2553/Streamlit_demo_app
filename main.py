@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import os
 from pathlib import Path
-=======
->>>>>>> 6baa59d76cb5983a84fae864348aac90c2681718
 import streamlit as st
 from streamlit_option_menu import option_menu
 from PIL import Image
@@ -67,7 +64,6 @@ if selected == 'Diabetes Prediction':
 if selected == 'Heart Disease Prediction':
     
 
-<<<<<<< HEAD
     # # drive.mount('/content/gdrive')  # Replace '/content/gdrive' with your desired mount point
     # st.title("Image Classification with Streamlit and Google Colab")
     # st.write("Upload an image and it will be processed in Google Colab.")
@@ -110,21 +106,4 @@ if selected == 'Heart Disease Prediction':
     
     if uploaded_file is not None:
         upload_to_drive(uploaded_file)
-=======
-    # # drive.mount('/content/gdrive')  # Replace '/content/gdrive' with your desired mount point
-    # st.title("Image Classification with Streamlit and Google Colab")
-    # st.write("Upload an image and it will be processed in Google Colab.")
-    # uploaded_file = st.file_uploader("Choose an image:", type=["jpg", "jpeg", "png"])
-    
-    # if uploaded_file is not None:
-    #     image = Image.open(uploaded_file)  # Open the uploaded image using PIL(pillow library)
-    #     st.image(image, caption="Uploaded Image", use_column_width=True)
-    #     # Save the uploaded image to Google Drive
-    #     with open('/content/gdrive/My Drive/Drive-image/' + uploaded_file.name, 'wb') as f:
-    #         f.write(uploaded_file.read())
-    #     st.success("Image uploaded successfully!")
 
-
-
-
->>>>>>> 6baa59d76cb5983a84fae864348aac90c2681718

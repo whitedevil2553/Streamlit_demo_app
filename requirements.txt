@@ -1,3 +1,5 @@
+os
+pathlib
 streamlit
 streamlit_option_menu
 Pillow
