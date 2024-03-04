@@ -4,12 +4,20 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 from PIL import Image
+from google.colab import drive
 
 
 st.set_page_config(page_title="Health Assistant",
                    layout="wide",
                    page_icon="🧑‍⚕️")
 
+
+
+# filename = 'diabetes_model.sav'
+# pickle.dump(classifier, open(filename, 'wb'))
+
+
+diabetes_model = pickle.load(open(f'{working_dir}CNN_BrainMRI_tumor_classification.pt', 'rb'))
 
 with st.sidebar:
     selected = option_menu('Multiple Disease Prediction System',
@@ -23,6 +31,10 @@ with st.sidebar:
                            menu_icon='hospital-fill',
                            icons=['activity', 'heart', 'person','heart'],
                            default_index=0)
+
+
+
+
 
 
 
@@ -85,14 +97,27 @@ if selected == 'Heart Disease Prediction':
     st.title("Image Recogonization")
 
 
-    def display_local_image():
-        """Displays an image uploaded from the local disk."""
-        uploaded_file = st.file_uploader("Choose an MRI Image From Your Local Disk", type=['jpg', 'png','jpeg'])
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)  # Open the uploaded image using PIL(pillow library)
-            st.image(image, caption="Uploaded Image", use_column_width=True)
+    # def display_local_image():
+    #     """Displays an image uploaded from the local disk."""
+    #     uploaded_file = st.file_uploader("Choose an MRI Image From Your Local Disk", type=['jpg', 'png','jpeg'])
+    #     if uploaded_file is not None:
+    #         image = Image.open(uploaded_file)  # Open the uploaded image using PIL(pillow library)
+    #         st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    display_local_image()
+    # display_local_image()
+
+
+
+    drive.mount('/content/gdrive')  # Replace '/content/gdrive' with your desired mount point
+    st.title("Image Classification with Streamlit and Google Colab")
+    st.write("Upload an image and it will be processed in Google Colab.")
+    uploaded_file = st.file_uploader("Choose an image:", type=["jpg", "jpeg", "png"])
+    
+    if uploaded_file is not None:
+        # Save the uploaded image to Google Drive
+        with open('/content/gdrive/My Drive/images/' + uploaded_file.name, 'wb') as f:
+            f.write(uploaded_file.read())
+        st.success("Image uploaded successfully!")
 
 
 
