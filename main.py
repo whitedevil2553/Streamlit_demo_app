@@ -81,16 +81,54 @@ if selected == 'Heart Disease Prediction':
 
 
 
-    # Function to upload image to Google Drive
+    # # Function to upload image to Google Drive
+    # def upload_to_drive(uploaded_file):
+    #     # Define the directory path in Google Drive
+    #     drive_path = Path('/content/gdrive/My Drive/Drive-image/')
+    
+    #     # Create directory if it doesn't exist
+    #     drive_path.mkdir(parents=True, exist_ok=True)
+    
+    #     # Get the file name
+    #     filename = uploaded_file.name
+    
+    #     # Construct the full file path
+    #     file_path = drive_path / filename
+    
+    #     # Write the uploaded file to Google Drive
+    #     with open(file_path, 'wb') as f:
+    #         f.write(uploaded_file.getvalue())
+    
+    #     # Inform the user about successful upload
+    #     st.success("File uploaded to Google Drive successfully.")
+
+    # # Streamlit app code
+    # if __name__ == '__main__':
+    #     uploaded_file = st.file_uploader("Upload an image", type=['png', 'jpg', 'jpeg'])
+    
+    #     if uploaded_file is not None:
+    #         upload_to_drive(uploaded_file)
+
+
+
+
+
+
+
+
+
+
+
     def upload_to_drive(uploaded_file):
         # Define the directory path in Google Drive
         drive_path = Path('/content/gdrive/My Drive/Drive-image/')
     
-        # Create directory if it doesn't exist
-        drive_path.mkdir(parents=True, exist_ok=True)
+        # Check if directory exists, if not, create it
+        if not drive_path.exists():
+            drive_path.mkdir(parents=True, exist_ok=True)
     
         # Get the file name
-        filename = uploaded_file.name
+        filename = Path(uploaded_file.name).name
     
         # Construct the full file path
         file_path = drive_path / filename
@@ -100,7 +138,7 @@ if selected == 'Heart Disease Prediction':
             f.write(uploaded_file.getvalue())
     
         # Inform the user about successful upload
-        st.success("File uploaded to Google Drive successfully.")
+        st.success(f"File '{filename}' uploaded to Google Drive successfully.")
 
     # Streamlit app code
     if __name__ == '__main__':
@@ -108,5 +146,3 @@ if selected == 'Heart Disease Prediction':
     
         if uploaded_file is not None:
             upload_to_drive(uploaded_file)
-
-
