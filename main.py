@@ -100,7 +100,7 @@ if selected == 'Heart Disease Prediction':
             f.write(uploaded_file.getvalue())
     
         # Inform the user about successful upload
-    st.success(f"File '{filename}' uploaded to Google Drive successfully.")
+        st.success("File uploaded to Google Drive successfully.")
 
     # Streamlit app code
     if __name__ == '__main__':
