@@ -1,29 +1,9 @@
-from pathlib import Path
+
 import streamlit as st
 from streamlit_option_menu import option_menu
 from PIL import Image
+from google_drive_api import upload_to_google_drive
 
-# Function to upload image to Google Drive
-def upload_to_drive(uploaded_file):
-    # Define the directory path in Google Drive
-    drive_path = Path('/content/gdrive/My Drive/Drive-image/')
-    
-    # Check if directory exists, if not, create it
-    if not drive_path.exists():
-        drive_path.mkdir(parents=True, exist_ok=True)
-    
-    # Get the file name
-    filename = Path(uploaded_file.name).name
-    
-    # Construct the full file path
-    file_path = drive_path / filename
-    
-    # Write the uploaded file to Google Drive
-    with open(file_path, 'wb') as f:
-        f.write(uploaded_file.getvalue())
-    
-    # Inform the user about successful upload
-    st.success(f"File '{filename}' uploaded to Google Drive successfully.")
 
 # Function to perform diabetes prediction
 def diabetes_prediction():
@@ -80,15 +60,23 @@ if __name__ == '__main__':
     elif selected == 'Heart Disease Prediction':
         heart_disease_prediction()
 
-    # Image upload section
-    st.write("Upload an image")
-    uploaded_file = st.file_uploader("Choose an image:", type=["jpg", "jpeg", "png"])
+   # Function to upload image to Google Drive
+    def upload_and_store_image(uploaded_file):
+        # Upload the image to Google Drive
+        success = upload_to_google_drive(uploaded_file)
+    
+        # Display success or error message
+        if success:
+            st.success("Image uploaded to Google Drive successfully!")
+        else:
+            st.error("Failed to upload image to Google Drive. Please try again later.")
 
-    # Process uploaded image
-    if uploaded_file is not None:
-        upload_to_drive(uploaded_file)
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+    # Streamlit app code
+    if __name__ == '__main__':
+        uploaded_file = st.file_uploader("Upload an image", type=['png', 'jpg', 'jpeg'])
+    
+        if uploaded_file is not None:
+            upload_and_store_image(uploaded_file)
 
 
 

@@ -1,4 +1,4 @@
-pathlib
 streamlit
 streamlit_option_menu
 Pillow
+google_drive_api
