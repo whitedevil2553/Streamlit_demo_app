@@ -240,3 +240,72 @@ if __name__ == '__main__':
     
 #         if uploaded_file is not None:
 #             upload_to_drive(uploaded_file)
+
+
+
+
+
+
+
+
+# import os
+# from pathlib import Path
+# import streamlit as st
+# from googleapiclient.discovery import build
+# from google_auth_oauthlib.flow import InstalledAppFlow
+# from google.auth.transport.requests import Request
+
+# # Google Drive API scopes
+# SCOPES = ['https://www.googleapis.com/auth/drive']
+
+# # Function to authenticate Google Drive API
+# def authenticate():
+#     creds = None
+#     if os.path.exists('token.json'):
+#         creds = Credentials.from_authorized_user_file('token.json')
+#     # If credentials are not available or are invalid, authenticate
+#     if not creds or not creds.valid:
+#         if creds and creds.expired and creds.refresh_token:
+#             creds.refresh(Request())
+#         else:
+#             flow = InstalledAppFlow.from_client_secrets_file(
+#                 'credentials.json', SCOPES)
+#             creds = flow.run_local_server(port=0)
+#         # Save the credentials for the next run
+#         with open('token.json', 'w') as token:
+#             token.write(creds.to_json())
+#     return creds
+
+# # Function to upload image to Google Drive
+# def upload_to_drive(uploaded_file):
+#     creds = authenticate()
+#     service = build('drive', 'v3', credentials=creds)
+
+#     # Define the folder ID where you want to upload the image
+#     folder_id = 'https://drive.google.com/drive/folders/1Mkv8nm0rMpgiTJOvOpAjliz_jpp4mxWj?usp=sharing'
+
+#     # Create metadata for the file
+#     file_metadata = {
+#         'name': uploaded_file.name,
+#         'parents': [folder_id]
+#     }
+
+#     # Upload the file to Google Drive
+#     media = MediaIoBaseUpload(uploaded_file, mimetype='image/jpeg')
+#     file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+    
+#     # Inform the user about successful upload
+#     st.success(f"File '{uploaded_file.name}' uploaded to Google Drive successfully.")
+
+# # Streamlit app code
+# def main():
+#     st.title("Upload Image to Google Drive")
+
+#     # File uploader
+#     uploaded_file = st.file_uploader("Upload an image", type=['png', 'jpg', 'jpeg'])
+
+#     if uploaded_file is not None:
+#         upload_to_drive(uploaded_file)
+
+# if __name__ == "__main__":
+#     main()
