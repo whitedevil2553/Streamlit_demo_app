@@ -92,22 +92,61 @@
 
 
 import streamlit as st
-import tensorflow as tf
+import torch
 from PIL import Image
 import requests
 import numpy as np
 
 # Function to load model
+# @st.cache(allow_output_mutation=True)
+# def load_model():
+#     model_url = "https://drive.google.com/uc?export=download&id=10_CL4rGvZXD0Mb1Hf0h2dA0X5LyZ5noI"
+#     model_file = requests.get(model_url)
+#     with open("model.h5", "wb") as f:
+#         f.write(model_file.content)
+#     return tf.keras.models.load_model("model.h5")
+
+# # Load the model
+# model = load_model()
+
+
+
+
+# Define your model class
+class MyModel(torch.nn.Module):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        # Define your model architecture here
+
+    def forward(self, x):
+        # Define the forward pass of your model here
+        return x
+
+# Function to load model
 @st.cache(allow_output_mutation=True)
 def load_model():
+    # Define the URL to download the model weights from
     model_url = "https://drive.google.com/uc?export=download&id=10_CL4rGvZXD0Mb1Hf0h2dA0X5LyZ5noI"
-    model_file = requests.get(model_url)
-    with open("model.h5", "wb") as f:
-        f.write(model_file.content)
-    return tf.keras.models.load_model("model.h5")
+    
+    # Download the model weights
+    model_weights = requests.get(model_url).content
+    
+    # Create an instance of your model class
+    model = MyModel()
+    
+    # Load the model weights
+    model.load_state_dict(torch.load(model_weights))
+    
+    return model
 
 # Load the model
 model = load_model()
+
+
+
+
+
+
 
 # Function to preprocess image
 def preprocess_image(image):
