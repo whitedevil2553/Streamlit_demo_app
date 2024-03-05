@@ -1,26 +1,127 @@
+# import streamlit as st
+# import tensorflow as tf
+# from PIL import Image
+# import requests
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+# # Function to load model
+# @st.cache(allow_output_mutation=True)
+# def load_model():
+#     model_url = "https://drive.google.com/uc?export=download&id=1lEiIeM4SyCsJYjfHYjyMuGlayP2yhj3Y"
+#     model_file = requests.get(model_url)
+#     with open("model.pt", "wb") as f:
+#         f.write(model_file.content)
+#     return tf.keras.models.load_model("model.pt")
+
+# # Load the model
+# model = load_model()
+
+# # Function to make predictions
+# def predict(image):
+#     # Preprocess the image (if required)
+#     # For example, resize the image to the input size expected by the model
+#     processed_image = preprocess_image(image)
+#     # Make predictions
+#     prediction = model.predict(processed_image)
+#     return prediction
+
+# # Streamlit app code
+# st.title("Image Classification App")
+
+# uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+
+# if uploaded_file is not None:
+#     # Display the uploaded image
+#     image = Image.open(uploaded_file)
+#     st.image(image, caption="Uploaded Image", use_column_width=True)
+    
+#     # Make predictions
+#     prediction = predict(image)
+    
+#     # Display the prediction
+#     st.write("Prediction:", prediction)
+
+
+
+
+
+
+
+
+
+
+
+# # Function to load and preprocess a single MRI image
+# def load_and_preprocess_image(image_path):
+#     image = Image.open(image_path).convert("L")  # Convert to grayscale
+#     image = image.resize((128, 128))  # Resize to match model input size
+#     image_array = np.asarray(image)  # Convert to numpy array
+#     image_tensor = torch.tensor(image_array, dtype=torch.float32).unsqueeze(0).unsqueeze(0)  # Add batch and channel dimensions
+#     return image_tensor
+
+# # Function to predict tumor presence in a single MRI image
+# def predict_tumor_presence(model, image_tensor):
+#     model.eval()  # Set model to evaluation mode
+#     with torch.no_grad():  # Disable gradient calculation
+#         output = model(image_tensor.to(device))  # Forward pass
+#         prediction = torch.argmax(output, dim=1).item()  # Get predicted class index
+#     return prediction
+
+# # Function to display prediction
+# def display_prediction(image_path, prediction):
+#     mapping = {0: 'No tumor', 1: 'Tumor'}
+#     plt.imshow(Image.open(image_path), cmap='gray')
+#     plt.title(f'Predicted: {mapping[prediction]}')
+#     plt.axis('off')
+#     plt.show()
+
+# # Path to the single MRI image you want to test
+# # single_image_path = "Y104.jpg"
+
+# # Load and preprocess the single MRI image
+# image_tensor = load_and_preprocess_image(uploaded_file)
+
+# # Predict tumor presence
+# prediction = predict_tumor_presence(model, image_tensor)
+
+# # Display prediction
+# display_prediction(uploaded_file, prediction)
+
+
+
+
 import streamlit as st
 import tensorflow as tf
 from PIL import Image
 import requests
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Function to load model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model_url = "https://drive.google.com/uc?export=download&id=1lEiIeM4SyCsJYjfHYjyMuGlayP2yhj3Y"
+    model_url = "https://drive.google.com/uc?export=download&id=10_CL4rGvZXD0Mb1Hf0h2dA0X5LyZ5noI"
     model_file = requests.get(model_url)
-    with open("model.pt", "wb") as f:
+    with open("model.h5", "wb") as f:
         f.write(model_file.content)
-    return tf.keras.models.load_model("model.pt")
+    return tf.keras.models.load_model("model.h5")
 
 # Load the model
 model = load_model()
 
+# Function to preprocess image
+def preprocess_image(image):
+    # Resize the image to match model input size
+    resized_image = image.resize((128, 128))
+    # Convert image to numpy array and normalize pixel values
+    processed_image = np.array(resized_image) / 255.0
+    # Add batch dimension
+    processed_image = np.expand_dims(processed_image, axis=0)
+    return processed_image
+
 # Function to make predictions
 def predict(image):
-    # Preprocess the image (if required)
-    # For example, resize the image to the input size expected by the model
+    # Preprocess the image
     processed_image = preprocess_image(image)
     # Make predictions
     prediction = model.predict(processed_image)
@@ -41,56 +142,6 @@ if uploaded_file is not None:
     
     # Display the prediction
     st.write("Prediction:", prediction)
-
-
-
-
-
-
-
-
-
-
-
-# Function to load and preprocess a single MRI image
-def load_and_preprocess_image(image_path):
-    image = Image.open(image_path).convert("L")  # Convert to grayscale
-    image = image.resize((128, 128))  # Resize to match model input size
-    image_array = np.asarray(image)  # Convert to numpy array
-    image_tensor = torch.tensor(image_array, dtype=torch.float32).unsqueeze(0).unsqueeze(0)  # Add batch and channel dimensions
-    return image_tensor
-
-# Function to predict tumor presence in a single MRI image
-def predict_tumor_presence(model, image_tensor):
-    model.eval()  # Set model to evaluation mode
-    with torch.no_grad():  # Disable gradient calculation
-        output = model(image_tensor.to(device))  # Forward pass
-        prediction = torch.argmax(output, dim=1).item()  # Get predicted class index
-    return prediction
-
-# Function to display prediction
-def display_prediction(image_path, prediction):
-    mapping = {0: 'No tumor', 1: 'Tumor'}
-    plt.imshow(Image.open(image_path), cmap='gray')
-    plt.title(f'Predicted: {mapping[prediction]}')
-    plt.axis('off')
-    plt.show()
-
-# Path to the single MRI image you want to test
-# single_image_path = "Y104.jpg"
-
-# Load and preprocess the single MRI image
-image_tensor = load_and_preprocess_image(uploaded_file)
-
-# Predict tumor presence
-prediction = predict_tumor_presence(model, image_tensor)
-
-# Display prediction
-display_prediction(uploaded_file, prediction)
-
-
-
-
 
 
 
