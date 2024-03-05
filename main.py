@@ -6,11 +6,11 @@ import requests
 # Function to load model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model_url = "https://drive.google.com/uc?export=download&id=10_CL4rGvZXD0Mb1Hf0h2dA0X5LyZ5noI"
+    model_url = "https://drive.google.com/uc?export=download&id=1lEiIeM4SyCsJYjfHYjyMuGlayP2yhj3Y"
     model_file = requests.get(model_url)
-    with open("model.h5", "wb") as f:
+    with open("model.pt", "wb") as f:
         f.write(model_file.content)
-    return tf.keras.models.load_model("model.h5")
+    return tf.keras.models.load_model("model.pt")
 
 # Load the model
 model = load_model()
@@ -39,6 +39,57 @@ if uploaded_file is not None:
     
     # Display the prediction
     st.write("Prediction:", prediction)
+
+
+
+
+
+
+
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+# from PIL import Image
+
+# # Function to load and preprocess a single MRI image
+# def load_and_preprocess_image(image_path):
+#     image = Image.open(image_path).convert("L")  # Convert to grayscale
+#     image = image.resize((128, 128))  # Resize to match model input size
+#     image_array = np.asarray(image)  # Convert to numpy array
+#     image_tensor = torch.tensor(image_array, dtype=torch.float32).unsqueeze(0).unsqueeze(0)  # Add batch and channel dimensions
+#     return image_tensor
+
+# # Function to predict tumor presence in a single MRI image
+# def predict_tumor_presence(model, image_tensor):
+#     model.eval()  # Set model to evaluation mode
+#     with torch.no_grad():  # Disable gradient calculation
+#         output = model(image_tensor.to(device))  # Forward pass
+#         prediction = torch.argmax(output, dim=1).item()  # Get predicted class index
+#     return prediction
+
+# # Function to display prediction
+# def display_prediction(image_path, prediction):
+#     mapping = {0: 'No tumor', 1: 'Tumor'}
+#     plt.imshow(Image.open(image_path), cmap='gray')
+#     plt.title(f'Predicted: {mapping[prediction]}')
+#     plt.axis('off')
+#     plt.show()
+
+# # Path to the single MRI image you want to test
+# single_image_path = "Y104.jpg"
+
+# # Load and preprocess the single MRI image
+# image_tensor = load_and_preprocess_image(single_image_path)
+
+# # Predict tumor presence
+# prediction = predict_tumor_presence(model1, image_tensor)
+
+# # Display prediction
+# display_prediction(single_image_path, prediction)
+
+
+
+
 
 
 
