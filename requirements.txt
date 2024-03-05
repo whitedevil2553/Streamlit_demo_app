@@ -1,5 +1,5 @@
 streamlit==1.0.0
-tourch
+torch
 Pillow==9.0.0
 requests==2.26.0
 numpy==1.21.5
