@@ -14,7 +14,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import warnings
-from st_clickable_images import clickable_images
+
 
 
 
