@@ -170,7 +170,7 @@ if selected=="Alzheimer Detection":
     warnings.filterwarnings("ignore")
 
     #designing the front look
-    st.title("Alzheeimer Detection")
+    st.title("Alzheimer Detection")
 
     # Test with a single image
     single_image_path_2 = st.file_uploader("Choose an MRI Image of Brain to Detect Alzheimer.........", type=["jpg", "jpeg", "png"])
